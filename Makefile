@@ -24,13 +24,14 @@ endef
 # Login to Docker
 login:
 	@echo "Checking Docker login status..."
-	@if ! docker info > /dev/null 2>&1; then \
+	@if ! grep -q '"auths": {' ~/.docker/config.json; then \
 		echo "Logging in to Docker..."; \
 		echo "$(DOCKER_PASSWORD)" | docker login --username "$(DOCKER_USERNAME)" --password-stdin > /dev/null 2>&1; \
 		echo "Logged in to Docker."; \
 	else \
 		echo "Already logged in to Docker."; \
 	fi
+
 	$(charging_bar)
 
 # Stop the container
