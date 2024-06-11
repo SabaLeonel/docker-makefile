@@ -4,7 +4,6 @@ CONTAINER_NAME=dopg-timbrage
 
 # Patterns for the charging bar
 PATTERN_BEGIN="»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»"
-PATTERN_END="«««««««««««««««««««««««««««««««««««««««««««««"
 
 # Include .env file
 include ./.env
@@ -18,18 +17,24 @@ define charging_bar
 		echo -n "»"; \
 		sleep 0.1; \
 	done
-	@echo -e "\033[0;32m $(PATTERN_END) Done!\033[0m"
+	@echo -e "\033[0;32m $(PATTERN_BEGIN) Done!\033[0m"
 endef
 
 # Login to Docker
 login:
 	@echo "Checking Docker login status..."
-	@if ! grep -q '"auths": {' ~/.docker/config.json; then \
+	@CONFIG_FILE="$HOME/.docker/config.json"; \
+	if [ ! -f "$$CONFIG_FILE" ]; then \
+		echo "Docker config file does not exist."; \
+		exit 1; \
+	fi; \
+	AUTH_CHECK=$$(jq '.auths | to_entries | length > 0' "$$CONFIG_FILE"); \
+	if [ "$$AUTH_CHECK" = "true" ]; then \
+		echo "Already logged in to Docker"; \
+	else \
 		echo "Logging in to Docker..."; \
 		echo "$(DOCKER_PASSWORD)" | docker login --username "$(DOCKER_USERNAME)" --password-stdin > /dev/null 2>&1; \
 		echo "Logged in to Docker."; \
-	else \
-		echo "Already logged in to Docker."; \
 	fi
 
 	$(charging_bar)
