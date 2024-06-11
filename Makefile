@@ -12,13 +12,13 @@ include ./.env
 # Makefile targets
 .PHONY: login stop remove pull run
 
-# Charging bar function
 define charging_bar
-@for ((i=0; i<=${#PATTERN_BEGIN}; i++)); do \
-    echo -ne "\r\033[0;32m$${PATTERN_BEGIN:0:i}\033[0m"; \
-    sleep 0.1; \
-done; \
-echo -e "\r\033[0;32m$(PATTERN_END) Done!\033[0m"
+	@echo -n " "
+	@for i in $$(seq 1 40); do \
+		echo -n "»"; \
+		sleep 0.1; \
+	done
+	@echo -e "\033[0;32m $(PATTERN_END) Done!\033[0m"
 endef
 
 # Login to Docker
