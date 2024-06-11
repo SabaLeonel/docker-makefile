@@ -2,17 +2,20 @@
 IMAGE_NAME=structosarl/dopg-timbrage:latest
 CONTAINER_NAME=dopg-timbrage
 
+# Patterns for the charging bar
+PATTERN_BEGIN="»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»"
+PATTERN_END="«««««««««««««««««««««««««««««««««««««««««««««"
+
 # Makefile targets
 .PHONY: stop remove pull run
 
 # Charging bar function
 define charging_bar
-@echo -n " "
-@for i in {1..10}; do \
-    echo -n "#"; \
+@for ((i=0; i<=${#PATTERN_BEGIN}; i++)); do \
+    echo -ne "\r\033[0;32m$${PATTERN_BEGIN:0:i}\033[0m"; \
     sleep 0.1; \
-done
-@echo " Done!"
+done; \
+echo -e "\r\033[0;32m$(PATTERN_END) Done!\033[0m"
 endef
 
 # Stop the container
@@ -44,3 +47,4 @@ run: pull
 
 # Default target
 all: run
+
