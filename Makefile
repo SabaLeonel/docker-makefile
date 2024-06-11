@@ -2,13 +2,12 @@
 IMAGE_NAME=structosarl/dopg-timbrage:latest
 CONTAINER_NAME=dopg-timbrage
 
-# Define Docker credentials
-DOCKER_USERNAME=structosarl
-DOCKER_PASSWORD=<your_password>
-
 # Patterns for the charging bar
 PATTERN_BEGIN="»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»»"
 PATTERN_END="«««««««««««««««««««««««««««««««««««««««««««««"
+
+# Include .env file
+include ./.env
 
 # Makefile targets
 .PHONY: login stop remove pull run
